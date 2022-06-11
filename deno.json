@@ -1,0 +1,12 @@
+{
+  "importMap": "import_map.json",
+  "tasks": {
+    "build": "deno run -A https://deno.land/x/lume@v1.9.1/ci.ts",
+    "serve": "deno task build -s",
+    "images": "curl -L https://github.com/kidonng/nikki/releases/download/images/images.tar.gz | tar xz",
+    "deploy": "deno task images && deno task build"
+  },
+  "compilerOptions": {
+      "lib": ["DOM", "DOM.Iterable", "Deno.ns"]
+  }
+}
