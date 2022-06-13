@@ -1,15 +1,49 @@
 <!DOCTYPE html>
+<!-- Source: https://github.com/kidonng/nikki -->
 <html>
     <head>
         <meta charset="utf-8" />
         <title>Yuru Yuri Katsudou Nikki</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="Yuru Yuri Katsudou Nikki" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://nikki.xuann.wang/" />
+        <meta property="og:image" content="/205.webp" />
+        <meta property="og:image:type" content="image/webp" />
+        <meta property="og:image:width" content="1080" />
+        <meta property="og:image:height" content="1350" />
+        <meta property="og:image:alt" content="Jul 24" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image:alt" content="Jul 24" />
         <link
             rel="stylesheet"
             href="https://esm.sh/photoswipe@5.2.7/dist/photoswipe.css"
         />
+        <style>
+            body {
+                margin: 0;
+            }
+
+            main {
+                display: flex;
+                min-height: 100vh;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #img {
+                object-fit: contain;
+                max-width: 100vw;
+                max-height: 100vh;
+            }
+        </style>
     </head>
     <body>
+        <main>
+            <a id="link" href="#">
+                <img id="img" width="1080" height="1350" />
+            </a>
+        </main>
         <script type="module" src="script.js"></script>
     </body>
 </html>
