@@ -60,6 +60,15 @@ const init = (index: number) => {
         location.hash = ''
         document.title = title
     })
+    pswp.on('uiRegister', () =>
+        pswp.ui.registerElement({
+            html: '<span style="font-size: 20px;">🎲</span>',
+            ariaLabel: 'Random',
+            order: 11,
+            isButton: true,
+            onClick: () => pswp.goTo(Math.floor(Math.random() * 365)),
+        })
+    )
     pswp.init()
 }
 
