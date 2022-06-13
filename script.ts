@@ -2,12 +2,18 @@ import PhotoSwipe, { type SlideData } from 'photoswipe'
 import dayjs from 'dayjs'
 import dayOfYear from 'dayjs/plugin/dayOfYear'
 import type {} from 'dayjs/plugin/dayOfYear.d.ts'
+import isLeapYear from 'dayjs/plugin/isLeapYear'
+import type {} from 'dayjs/plugin/isLeapYear.d.ts'
 
 dayjs.extend(dayOfYear)
+dayjs.extend(isLeapYear)
 
-const today = dayjs().dayOfYear()
+const d = dayjs()
+const today =
+    d.isLeapYear() && d.month() > 1 ? d.dayOfYear() - 1 : d.dayOfYear()
 const date = (day: number) => dayjs().dayOfYear(day).format('MMM D')
 const available = (day: number) => day <= 126 || day >= 151
+const random = () => Math.floor(Math.random() * 365) + 1
 
 // https://avif.io/blog/tutorials/css/#avifsupportdetectionscript
 const image = new Image()
@@ -18,10 +24,18 @@ const format = await new Promise<string>((resolve) => {
         'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A='
 })
 
-document.querySelector<HTMLAnchorElement>('#link')!.hash = String(today)
+const link = document.querySelector<HTMLAnchorElement>('#link')!
 const img = document.querySelector<HTMLImageElement>('#img')!
-img.src = `/${today}.${format}`
-img.alt = date(today)
+
+if (d.month() === 1 && d.date() === 29) {
+    link.hash = String(random())
+    link.textContent = '🎲'
+    link.classList.add('large', 'no-underline')
+} else {
+    link.hash = String(today)
+    img.src = `/${today}.${format}`
+    img.alt = date(today)
+}
 
 const dataSource = [...Array(365).keys()].map((index) => {
     const day = index + 1
@@ -33,13 +47,7 @@ const dataSource = [...Array(365).keys()].map((index) => {
                   height: 1350,
                   alt: date(day),
               }
-            : {
-                  html: `
-                        <div style="display: flex; height: 100%; justify-content: center; align-items: center;">
-                            <span style="font-size: 5rem; filter: invert(1);">🔜</span>
-                        </div>
-                      `,
-              }
+            : { html: '<div class="center large">🔜</div>' }
     ) as SlideData
 })
 
@@ -50,6 +58,7 @@ const init = (index: number) => {
     pswp = new PhotoSwipe({
         dataSource,
         index,
+        bgOpacity: 1,
     })
     pswp.on('change', () => {
         const day = pswp.currIndex + 1
@@ -66,7 +75,7 @@ const init = (index: number) => {
             ariaLabel: 'Random',
             order: 11,
             isButton: true,
-            onClick: () => pswp.goTo(Math.floor(Math.random() * 365)),
+            onClick: () => pswp.goTo(random() - 1),
         })
     )
     pswp.init()
