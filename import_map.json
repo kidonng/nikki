@@ -1,8 +1,7 @@
 {
-  "imports": {
-    "dayjs": "https://esm.sh/dayjs@1.11.3",
-    "dayjs/": "https://esm.sh/dayjs@1.11.3/",
-    "lume/": "https://deno.land/x/lume@v1.9.1/",
-    "photoswipe": "https://esm.sh/photoswipe@5.2.7"
-  }
+    "imports": {
+        "lume/": "https://deno.land/x/lume@v1.9.1/",
+        "luxon": "https://esm.sh/luxon@2.4.0",
+        "photoswipe": "https://esm.sh/photoswipe@5.2.7"
+    }
 }

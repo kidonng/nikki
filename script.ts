@@ -1,18 +1,10 @@
 import PhotoSwipe, { type SlideData } from 'photoswipe'
-import dayjs from 'dayjs'
-import dayOfYear from 'dayjs/plugin/dayOfYear'
-import type {} from 'dayjs/plugin/dayOfYear.d.ts'
-import isLeapYear from 'dayjs/plugin/isLeapYear'
-import type {} from 'dayjs/plugin/isLeapYear.d.ts'
+import { DateTime } from 'luxon'
 
-dayjs.extend(dayOfYear)
-dayjs.extend(isLeapYear)
-
-const d = dayjs()
-const today =
-    d.isLeapYear() && d.month() > 1 ? d.dayOfYear() - 1 : d.dayOfYear()
-const date = (day: number) => dayjs().dayOfYear(day).format('MMM D')
-const available = (day: number) => day <= 126 || day >= 151
+const now = DateTime.now()
+const date = (ordinal: number) =>
+    DateTime.fromObject({ year: 2022, ordinal }).toFormat('MMM d')
+const available = (no: number) => no <= 126 || no >= 151
 const random = () => Math.floor(Math.random() * 365) + 1
 
 // https://avif.io/blog/tutorials/css/#avifsupportdetectionscript
@@ -27,25 +19,26 @@ const format = await new Promise<string>((resolve) => {
 const link = document.querySelector<HTMLAnchorElement>('#link')!
 const img = document.querySelector<HTMLImageElement>('#img')!
 
-if (d.month() === 1 && d.date() === 29) {
+if (now.month === 2 && now.day === 29) {
     link.hash = String(random())
     link.textContent = '🎲'
     link.classList.add('large', 'no-underline')
 } else {
-    link.hash = String(today)
-    img.src = `/${today}.${format}`
-    img.alt = date(today)
+    const no = now.isInLeapYear && now.month > 2 ? now.ordinal - 1 : now.ordinal
+    link.hash = String(no)
+    img.src = `/${no}.${format}`
+    img.alt = date(no)
 }
 
 const dataSource = [...Array(365).keys()].map((index) => {
-    const day = index + 1
+    const no = index + 1
     return (
-        available(day)
+        available(no)
             ? {
-                  src: `/${day}.${format}`,
+                  src: `/${no}.${format}`,
                   width: 1080,
                   height: 1350,
-                  alt: date(day),
+                  alt: date(no),
               }
             : { html: '<div class="center large">🔜</div>' }
     ) as SlideData
@@ -61,9 +54,9 @@ const init = (index: number) => {
         bgOpacity: 1,
     })
     pswp.on('change', () => {
-        const day = pswp.currIndex + 1
-        location.hash = String(day)
-        document.title = `${date(day)} - ${title}`
+        const no = pswp.currIndex + 1
+        location.hash = String(no)
+        document.title = `${date(no)} - ${title}`
     })
     pswp.on('close', () => {
         location.hash = ''
@@ -82,9 +75,9 @@ const init = (index: number) => {
 }
 
 const hash = () => {
-    const day = parseInt(location.hash.slice(1))
-    if (!Number.isNaN(day) && day >= 1 && day <= 365) {
-        const index = day - 1
+    const no = parseInt(location.hash.slice(1))
+    if (!Number.isNaN(no) && no >= 1 && no <= 365) {
+        const index = no - 1
         if (!pswp || pswp.isDestroying) init(index)
         else pswp.goTo(index)
     }
