@@ -2,9 +2,9 @@
 
 A collection of Yuru Yuri artworks originally posted on [Namori's instagram](https://www.instagram.com/namoridane/) ([source](https://e-hentai.org/g/2214248/e8e871a84f/)).
 
-[The gallery](https://nikki.xuann.wang/) supports linking to a specific artwork via hash (`#<day of the year>`) and shows the one matching today's date by default.
+[The gallery](https://nikki.xuann.wang/) supports linking to a specific artwork via hash (`#<number>`) and shows the one matching today's date by default.
 
-Images are publicly available at `https://nikki.xuann.wang/<day of the year>.{jpg,webp,avif}`. WEBP and AVIF images are converted from JPG sources using [sharp](https://sharp.pixelplumbing.com/)'s default config.
+Images are available at `https://nikki.xuann.wang/<number>.{jpg,webp,avif}`, numbered after their ordinal date (1-365, currently missing 127-150). WEBP and AVIF images are converted from JPG sources using [sharp](https://sharp.pixelplumbing.com/)'s default config.
 
 ## Example
 
