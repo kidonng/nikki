@@ -1,6 +1,6 @@
 {
     "imports": {
-        "lume/": "https://deno.land/x/lume@v1.9.1/",
+        "lume/": "https://deno.land/x/lume@v1.10.0/",
         "luxon": "https://esm.sh/luxon@2.4.0",
         "photoswipe": "https://esm.sh/photoswipe@5.2.7"
     }
