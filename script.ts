@@ -2,8 +2,11 @@ import PhotoSwipe, { type SlideData } from 'photoswipe'
 import { DateTime } from 'luxon'
 
 const now = DateTime.now()
+const today = now.isInLeapYear && now.month > 2 ? now.ordinal - 1 : now.ordinal
+const isLeapDay = now.month === 2 && now.day === 29
 const date = (ordinal: number) =>
     DateTime.fromObject({ year: 2022, ordinal }).toFormat('MMM d')
+
 const available = (no: number) => no <= 126 || no >= 151
 const random = () => Math.floor(Math.random() * 365) + 1
 
@@ -19,15 +22,13 @@ const format = await new Promise<string>((resolve) => {
 const link = document.querySelector<HTMLAnchorElement>('#link')!
 const img = document.querySelector<HTMLImageElement>('#img')!
 
-if (now.month === 2 && now.day === 29) {
-    link.hash = String(random())
-    link.textContent = '🎲'
-    link.classList.add('large', 'no-underline')
+link.hash = isLeapDay ? 'random' : String(today)
+if (!isLeapDay && available(today)) {
+    img.src = `/${today}.${format}`
+    img.alt = date(today)
 } else {
-    const no = now.isInLeapYear && now.month > 2 ? now.ordinal - 1 : now.ordinal
-    link.hash = String(no)
-    img.src = `/${no}.${format}`
-    img.alt = date(no)
+    link.textContent = isLeapDay ? '🎲' : '🔜'
+    link.classList.add('large', 'no-underline')
 }
 
 const dataSource = [...Array(365).keys()].map((index) => {
@@ -60,22 +61,29 @@ const init = (index: number) => {
     })
     pswp.on('close', () => {
         location.hash = ''
-        document.title = title
     })
     pswp.on('uiRegister', () =>
         pswp.ui.registerElement({
-            html: '<span style="font-size: 20px;">🎲</span>',
+            name: 'random',
+            html: '<a class="no-underline" href="#random">🎲</a>',
             ariaLabel: 'Random',
             order: 11,
             isButton: true,
-            onClick: () => pswp.goTo(random() - 1),
         })
     )
     pswp.init()
 }
 
 const hash = () => {
-    const no = parseInt(location.hash.slice(1))
+    const hash = location.hash.slice(1)
+    if (hash === '') {
+        if (!isLeapDay) document.title = `${date(today)} - ${title}`
+        if (pswp && !pswp.isDestroying) pswp.close()
+        return
+    }
+    if (hash === 'random') return location.replace(`#${random()}`)
+
+    const no = parseInt(hash)
     if (!Number.isNaN(no) && no >= 1 && no <= 365) {
         const index = no - 1
         if (!pswp || pswp.isDestroying) init(index)
