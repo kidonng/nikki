@@ -24,6 +24,12 @@
                 margin: 0;
             }
 
+            @media (prefers-color-scheme: dark) {
+                body {
+                    background-color: black;
+                }
+            }
+
             .center {
                 display: flex;
                 min-height: 100vh;
@@ -43,6 +49,16 @@
                 object-fit: contain;
                 max-width: 100vw;
                 max-height: 100vh;
+            }
+
+            @media (prefers-color-scheme: light) {
+                .pswp {
+                    --pswp-bg: #fff;
+                    --pswp-placeholder-bg: #ddd;
+                    --pswp-icon-color: #000;
+                    --pswp-icon-color-secondary: #ddd;
+                    --pswp-icon-stroke-width: 0;
+                }
             }
         </style>
     </head>
