@@ -58,6 +58,7 @@ const init = (index: number) => {
         index,
         bgOpacity: 1,
     })
+
     pswp.on('change', () => (location.hash = String(pswp!.currIndex + 1)))
     pswp.on('close', () => (location.hash = ''))
     pswp.on('uiRegister', () =>
@@ -69,6 +70,7 @@ const init = (index: number) => {
             isButton: true,
         })
     )
+
     pswp.init()
 }
 
